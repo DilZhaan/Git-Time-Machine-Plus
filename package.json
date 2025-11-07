@@ -166,7 +166,7 @@
     "version:major": "npm version major && git push && git push --tags"
   },
   "devDependencies": {
-    "@types/node": "^20.x",
+    "@types/node": "^24.x",
     "@types/vscode": "^1.85.0",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
     "@typescript-eslint/parser": "^6.15.0",
