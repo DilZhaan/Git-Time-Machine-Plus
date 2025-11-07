@@ -1,0 +1,44 @@
+{
+  "name": "git-time-machine-plus",
+  "displayName": "Git Time Machine Plus",
+  "description": "Edit commit messages and timestamps of unpushed commits safely",
+  "version": "0.0.5",
+  "author": {
+    "name": "DilZhan Yapa",
+    "email": "dilzhanyapa@gmail.com",
+    "url": "https://www.linkedin.com/in/dilzhaan/"
+  },
+  "publisher": "DilZhaan",
+  "license": "MIT",
+  "icon": "media/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DilZhaan/Git-Time-Machine-Plus.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DilZhaan/Git-Time-Machine-Plus/issues"
+  },
+  "homepage": "https://github.com/DilZhaan/Git-Time-Machine-Plus#readme",
+  "keywords": [
+    "git",
+    "commit",
+    "history",
+    "amend",
+    "rebase",
+    "timestamp",
+    "message",
+    "edit",
+    "unpushed",
+    "source control",
+    "scm",
+    "time machine"
+  ],
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "SCM Providers",
+    "Other"
+  ]
+}
+
