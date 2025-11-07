@@ -39,10 +39,13 @@ jobs:
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
 
-      - name: Publish to Open VSX Registry
+      - name: Package for Open VSX
         if: success()
+        run: npm run package
+
+      - name: Publish to Open VSX Registry
+        if: success() && env.OVSX_TOKEN != ''
         run: npm run publish:openvsx
-        continue-on-error: true
         env:
           OVSX_TOKEN: ${{ secrets.OVSX_TOKEN }}
 

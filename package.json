@@ -159,7 +159,7 @@
     "clean": "rimraf out *.vsix",
     "package": "vsce package --no-dependencies",
     "publish:vscode": "vsce publish --no-dependencies",
-    "publish:openvsx": "ovsx publish *.vsix -p $OVSX_TOKEN",
+    "publish:openvsx": "ovsx publish *.vsix -p \"$OVSX_TOKEN\"",
     "publish:all": "npm run publish:vscode && npm run publish:openvsx",
     "version:patch": "npm version patch && git push && git push --tags",
     "version:minor": "npm version minor && git push && git push --tags",
