@@ -172,7 +172,7 @@
     "@typescript-eslint/parser": "^6.15.0",
     "@vscode/vsce": "^2.32.0",
     "eslint": "^8.56.0",
-    "ovsx": "^0.8.4",
+    "ovsx": "^0.10.6",
     "rimraf": "^5.0.10",
     "typescript": "^5.3.3"
   }
