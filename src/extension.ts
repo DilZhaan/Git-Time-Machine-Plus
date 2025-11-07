@@ -300,12 +300,26 @@ export function activate(context: vscode.ExtensionContext) {
   // Initial load
   commitTreeProvider.refresh();
 
-  // Watch for git changes
-  const fileWatcher = vscode.workspace.createFileSystemWatcher('**/.git/**');
-  fileWatcher.onDidChange(() => commitTreeProvider.refresh());
-  fileWatcher.onDidCreate(() => commitTreeProvider.refresh());
-  fileWatcher.onDidDelete(() => commitTreeProvider.refresh());
-  context.subscriptions.push(fileWatcher);
+  // Watch for git changes (debounced to prevent infinite refresh)
+  let refreshTimeout: NodeJS.Timeout | undefined;
+  const debouncedRefresh = () => {
+    if (refreshTimeout) {
+      clearTimeout(refreshTimeout);
+    }
+    refreshTimeout = setTimeout(() => {
+      commitTreeProvider.refresh();
+    }, 500); // Wait 500ms before refreshing
+  };
+
+  const gitDirWatcher = vscode.workspace.createFileSystemWatcher('**/.git/refs/**');
+  gitDirWatcher.onDidChange(debouncedRefresh);
+  gitDirWatcher.onDidCreate(debouncedRefresh);
+  gitDirWatcher.onDidDelete(debouncedRefresh);
+  context.subscriptions.push(gitDirWatcher);
+
+  const gitHeadWatcher = vscode.workspace.createFileSystemWatcher('**/.git/HEAD');
+  gitHeadWatcher.onDidChange(debouncedRefresh);
+  context.subscriptions.push(gitHeadWatcher);
 }
 
 /**

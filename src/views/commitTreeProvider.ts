@@ -72,11 +72,14 @@ export class CommitTreeProvider implements vscode.TreeDataProvider<CommitTreeIte
   readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
 
   private unpushedResult: UnpushedCommitsResult | null = null;
+  private isRefreshing: boolean = false;
 
   constructor(private gitService: GitService) {}
 
   refresh(): void {
-    this._onDidChangeTreeData.fire();
+    if (!this.isRefreshing) {
+      this._onDidChangeTreeData.fire();
+    }
   }
 
   getTreeItem(element: CommitTreeItem): vscode.TreeItem {
@@ -89,7 +92,15 @@ export class CommitTreeProvider implements vscode.TreeDataProvider<CommitTreeIte
       return [];
     }
 
+    // Prevent concurrent refreshes
+    if (this.isRefreshing) {
+      return this.unpushedResult?.commits.map(
+        (commit) => new CommitTreeItem(commit, vscode.TreeItemCollapsibleState.None, false)
+      ) || [];
+    }
+
     try {
+      this.isRefreshing = true;
       this.unpushedResult = await this.gitService.getUnpushedCommits();
 
       // Show empty state message in tree instead of popup
@@ -104,6 +115,8 @@ export class CommitTreeProvider implements vscode.TreeDataProvider<CommitTreeIte
       // Only show error if it's not a "no commits" scenario
       console.error('Error loading commits:', error);
       return [];
+    } finally {
+      this.isRefreshing = false;
     }
   }
 
