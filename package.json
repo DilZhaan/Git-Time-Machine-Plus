@@ -2,7 +2,7 @@
   "name": "git-time-machine-plus",
   "displayName": "Git Time Machine Plus",
   "description": "Edit commit messages and timestamps of unpushed commits safely",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": {
     "name": "DilZhan Yapa",
     "email": "dilzhanyapa@gmail.com",

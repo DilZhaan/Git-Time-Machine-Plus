@@ -7,19 +7,28 @@ import { GitService } from '../git/gitService';
  */
 export class CommitTreeItem extends vscode.TreeItem {
   constructor(
-    public readonly commit: GitCommit,
-    public readonly collapsibleState: vscode.TreeItemCollapsibleState
+    public readonly commit: GitCommit | null,
+    public readonly collapsibleState: vscode.TreeItemCollapsibleState,
+    isEmptyState: boolean = false
   ) {
-    super(commit.message, collapsibleState);
+    super(
+      isEmptyState ? 'No unpushed commits' : (commit?.message || 'Unknown'),
+      collapsibleState
+    );
 
-    this.tooltip = this.createTooltip();
-    this.description = this.createDescription();
-    this.contextValue = 'unpushedCommit';
-    this.iconPath = new vscode.ThemeIcon('git-commit');
+    if (isEmptyState) {
+      this.description = 'All commits are pushed to remote';
+      this.iconPath = new vscode.ThemeIcon('check');
+      this.contextValue = 'emptyState';
+    } else if (commit) {
+      this.tooltip = this.createTooltip(commit);
+      this.description = this.createDescription(commit);
+      this.contextValue = 'unpushedCommit';
+      this.iconPath = new vscode.ThemeIcon('git-commit');
+    }
   }
 
-  private createTooltip(): string {
-    const { commit } = this;
+  private createTooltip(commit: GitCommit): string {
     return [
       `Hash: ${commit.hash}`,
       `Author: ${commit.author} <${commit.authorEmail}>`,
@@ -30,8 +39,8 @@ export class CommitTreeItem extends vscode.TreeItem {
     ].join('\n');
   }
 
-  private createDescription(): string {
-    return `${this.commit.shortHash} • ${this.commit.author} • ${this.formatDate(this.commit.date)}`;
+  private createDescription(commit: GitCommit): string {
+    return `${commit.shortHash} • ${commit.author} • ${this.formatDate(commit.date)}`;
   }
 
   private formatDate(date: Date): string {
@@ -83,18 +92,17 @@ export class CommitTreeProvider implements vscode.TreeDataProvider<CommitTreeIte
     try {
       this.unpushedResult = await this.gitService.getUnpushedCommits();
 
+      // Show empty state message in tree instead of popup
       if (this.unpushedResult.commits.length === 0) {
-        vscode.window.showInformationMessage(
-          'No unpushed commits found on the current branch.'
-        );
-        return [];
+        return [new CommitTreeItem(null, vscode.TreeItemCollapsibleState.None, true)];
       }
 
       return this.unpushedResult.commits.map(
-        (commit) => new CommitTreeItem(commit, vscode.TreeItemCollapsibleState.None)
+        (commit) => new CommitTreeItem(commit, vscode.TreeItemCollapsibleState.None, false)
       );
     } catch (error) {
-      vscode.window.showErrorMessage(`Error loading commits: ${error}`);
+      // Only show error if it's not a "no commits" scenario
+      console.error('Error loading commits:', error);
       return [];
     }
   }
