@@ -21,7 +21,7 @@ This installs:
 2. Sign in with Microsoft account
 3. Click **Create Publisher**
 4. Fill in:
-   - **Publisher ID**: `your-publisher-name` (update in package.json)
+   - **Publisher ID**: `DilZhanYapa` (update in package.json)
    - **Display Name**: Your name or organization
    - **Description**: Brief description
 
@@ -40,7 +40,7 @@ This installs:
 ### 4. Login to VSCE
 
 ```bash
-npx vsce login your-publisher-name
+npx vsce login DilZhanYapa
 ```
 
 Enter your PAT when prompted.
@@ -231,8 +231,8 @@ code --install-extension git-time-machine-0.0.1.vsix
 npm run publish:all
 
 # 7. Verify on marketplace
-# VS Code: https://marketplace.visualstudio.com/items?itemName=your-publisher-name.git-time-machine
-# Open VSX: https://open-vsx.org/extension/your-publisher-name/git-time-machine
+# VS Code: https://marketplace.visualstudio.com/items?itemName=DilZhanYapa.git-time-machine
+# Open VSX: https://open-vsx.org/extension/DilZhanYapa/git-time-machine
 ```
 
 ### Subsequent Releases
@@ -260,7 +260,7 @@ npm run publish:all
 
 ### After Publishing to VS Code Marketplace
 
-1. Visit: `https://marketplace.visualstudio.com/items?itemName=your-publisher-name.git-time-machine`
+1. Visit: `https://marketplace.visualstudio.com/items?itemName=DilZhanYapa.git-time-machine`
 2. Check:
    - [ ] Icon displays correctly
    - [ ] Description is accurate
@@ -270,17 +270,17 @@ npm run publish:all
 
 ### After Publishing to Open VSX
 
-1. Visit: `https://open-vsx.org/extension/your-publisher-name/git-time-machine`
+1. Visit: `https://open-vsx.org/extension/DilZhanYapa/git-time-machine`
 2. Check same items as above
 
 ### Test Installation
 
 ```bash
 # Uninstall if already installed
-code --uninstall-extension your-publisher-name.git-time-machine
+code --uninstall-extension DilZhanYapa.git-time-machine
 
 # Install from marketplace
-code --install-extension your-publisher-name.git-time-machine
+code --install-extension DilZhanYapa.git-time-machine
 
 # Verify it works
 ```
@@ -330,7 +330,7 @@ The `.vscodeignore` file excludes:
 **Solution**: Update `publisher` field in package.json
 ```json
 {
-  "publisher": "your-publisher-name"
+  "publisher": "DilZhanYapa"
 }
 ```
 
@@ -342,7 +342,7 @@ The `.vscodeignore` file excludes:
 
 **Solution**: 
 1. Generate new PAT with Marketplace: Manage scope
-2. Login again: `npx vsce login your-publisher-name`
+2. Login again: `npx vsce login DilZhanYapa`
 
 ### "OVSX token not found"
 
@@ -456,7 +456,7 @@ npm run publish:all     # Publish to both
 
 # Verification
 npx vsce ls            # List package contents
-npx vsce show your-publisher-name.git-time-machine
+npx vsce show DilZhanYapa.git-time-machine
 ```
 
 ---

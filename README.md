@@ -9,14 +9,14 @@
 </p>
 
 <p align="center">
-  <a href="https://marketplace.visualstudio.com/items?itemName=your-publisher-name.git-time-machine">
-    <img src="https://img.shields.io/visual-studio-marketplace/v/your-publisher-name.git-time-machine?color=007ACC&label=VS%20Code%20Marketplace" alt="VS Code Marketplace">
+  <a href="https://marketplace.visualstudio.com/items?itemName=DilZhanYapa.git-time-machine">
+    <img src="https://img.shields.io/visual-studio-marketplace/v/DilZhanYapa.git-time-machine?color=007ACC&label=VS%20Code%20Marketplace" alt="VS Code Marketplace">
   </a>
-  <a href="https://marketplace.visualstudio.com/items?itemName=your-publisher-name.git-time-machine">
-    <img src="https://img.shields.io/visual-studio-marketplace/d/your-publisher-name.git-time-machine?color=4EC9B0" alt="Downloads">
+  <a href="https://marketplace.visualstudio.com/items?itemName=DilZhanYapa.git-time-machine">
+    <img src="https://img.shields.io/visual-studio-marketplace/d/DilZhanYapa.git-time-machine?color=4EC9B0" alt="Downloads">
   </a>
-  <a href="https://marketplace.visualstudio.com/items?itemName=your-publisher-name.git-time-machine">
-    <img src="https://img.shields.io/visual-studio-marketplace/r/your-publisher-name.git-time-machine?color=4EC9B0" alt="Rating">
+  <a href="https://marketplace.visualstudio.com/items?itemName=DilZhanYapa.git-time-machine">
+    <img src="https://img.shields.io/visual-studio-marketplace/r/DilZhanYapa.git-time-machine?color=4EC9B0" alt="Rating">
   </a>
   <a href="LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License">

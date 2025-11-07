@@ -154,7 +154,7 @@ Features:
 
 ## Publisher Information
 
-**Publisher**: your-publisher-name
+**Publisher**: DilZhanYapa
 **Author**: DilZhan YaPa
 **Contact**: your.email@example.com
 **Repository**: https://github.com/yourusername/git-time-machine
