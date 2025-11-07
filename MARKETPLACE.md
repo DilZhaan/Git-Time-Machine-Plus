@@ -156,7 +156,7 @@ Features:
 
 **Publisher**: DilZhanYapa
 **Author**: DilZhan YaPa
-**Contact**: your.email@example.com
+**Contact**: dilzhanyapa@gmail.com
 **Repository**: https://github.com/yourusername/git-time-machine
 
 ## Pricing

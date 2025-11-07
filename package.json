@@ -2,18 +2,22 @@
   "name": "git-time-machine-plus",
   "displayName": "Git Time Machine Plus",
   "description": "Edit commit messages and timestamps of unpushed commits safely",
-  "version": "0.0.2",
-  "author": "DilZhan YaPa",
+  "version": "0.0.3",
+  "author": {
+    "name": "DilZhan Yapa",
+    "email": "dilzhanyapa@gmail.com",
+    "url": "https://www.linkedin.com/in/dilzhaan/"
+  },
   "publisher": "DilZhanYapa",
   "icon": "media/icon.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/DilZhaan/git-time-machine.git"
+    "url": "https://github.com/DilZhaan/Git-Time-Machine-Plus.git"
   },
   "bugs": {
-    "url": "https://github.com/DilZhaan/git-time-machine/issues"
+    "url": "https://github.com/DilZhaan/Git-Time-Machine-Plus/issues"
   },
-  "homepage": "https://github.com/DilZhaan/git-time-machine#readme",
+  "homepage": "https://github.com/DilZhaan/Git-Time-Machine-Plus#readme",
   "keywords": [
     "git",
     "commit",
@@ -36,11 +40,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:git-time-machine.showUnpushedCommits",
-    "onCommand:git-time-machine.editCommit",
-    "onCommand:git-time-machine.editCommitFull",
-    "onCommand:git-time-machine.bulkEdit",
-    "onCommand:git-time-machine.undo"
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
   "contributes": {

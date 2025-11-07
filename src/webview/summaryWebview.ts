@@ -62,7 +62,9 @@ export class SummaryWebview {
    * Show progress animation
    */
   private showProgressAnimation(): void {
-    if (!this.panel) return;
+    if (!this.panel) {
+      return;
+    }
 
     this.panel.webview.html = this.getProgressHtml();
 
