@@ -57,7 +57,6 @@ jobs:
   publish-openvsx:
     needs: build
     runs-on: ubuntu-latest
-    if: ${{ secrets.OVSX_TOKEN != '' }}
     
     steps:
       - name: Download VSIX artifact
@@ -66,7 +65,8 @@ jobs:
           name: extension-package
 
       - name: Publish to Open VSX Registry
-        run: npx ovsx publish *.vsix -p $OVSX_TOKEN
+        continue-on-error: true
+        run: npx ovsx publish *.vsix -p "$OVSX_TOKEN"
         env:
           OVSX_TOKEN: ${{ secrets.OVSX_TOKEN }}
 
