@@ -1,0 +1,134 @@
+{
+  "name": "git-time-machine",
+  "displayName": "Git Time Machine",
+  "description": "Edit commit messages and timestamps of unpushed commits safely",
+  "version": "0.0.1",
+  "author": "DilZhan YaPa",
+  "publisher": "your-publisher-name",
+  "icon": "media/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/git-time-machine.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/git-time-machine/issues"
+  },
+  "homepage": "https://github.com/yourusername/git-time-machine#readme",
+  "keywords": [
+    "git",
+    "commit",
+    "history",
+    "amend",
+    "rebase",
+    "timestamp",
+    "message",
+    "edit",
+    "unpushed",
+    "source control",
+    "scm",
+    "time machine"
+  ],
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "SCM Providers",
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:git-time-machine.showUnpushedCommits",
+    "onCommand:git-time-machine.editCommit",
+    "onCommand:git-time-machine.editCommitFull",
+    "onCommand:git-time-machine.bulkEdit",
+    "onCommand:git-time-machine.undo"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "git-time-machine.showUnpushedCommits",
+        "title": "Git Time Machine: Show Unpushed Commits",
+        "icon": "$(history)"
+      },
+      {
+        "command": "git-time-machine.editCommit",
+        "title": "Git Time Machine: Edit Commit",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "git-time-machine.refreshView",
+        "title": "Refresh",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "git-time-machine.editCommitFull",
+        "title": "Git Time Machine: Edit Commit (Full Flow with Webview)",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "git-time-machine.bulkEdit",
+        "title": "Git Time Machine: Bulk Edit Multiple Commits",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "git-time-machine.undo",
+        "title": "Git Time Machine: Undo Changes (Restore Backup)",
+        "icon": "$(discard)"
+      }
+    ],
+    "views": {
+      "scm": [
+        {
+          "id": "gitTimeMachine",
+          "name": "Git Time Machine",
+          "icon": "$(history)",
+          "contextualTitle": "Unpushed Commits"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "git-time-machine.refreshView",
+          "when": "view == gitTimeMachine",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "git-time-machine.editCommit",
+          "when": "view == gitTimeMachine && viewItem == unpushedCommit",
+          "group": "inline"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "npm run compile && npm run lint",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "clean": "rimraf out *.vsix",
+    "package": "vsce package --no-dependencies",
+    "publish:vscode": "vsce publish --no-dependencies",
+    "publish:openvsx": "ovsx publish *.vsix -p $OVSX_TOKEN",
+    "publish:all": "npm run publish:vscode && npm run publish:openvsx",
+    "version:patch": "npm version patch && git push && git push --tags",
+    "version:minor": "npm version minor && git push && git push --tags",
+    "version:major": "npm version major && git push && git push --tags"
+  },
+  "devDependencies": {
+    "@types/node": "^20.x",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "@vscode/vsce": "^2.32.0",
+    "eslint": "^8.56.0",
+    "ovsx": "^0.8.4",
+    "rimraf": "^5.0.10",
+    "typescript": "^5.3.3"
+  }
+}

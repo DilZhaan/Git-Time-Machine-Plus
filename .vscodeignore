@@ -1,0 +1,66 @@
+# Development files
+.vscode/**
+.vscode-test/**
+src/**
+tsconfig.json
+.eslintrc.json
+.gitignore
+
+# Source maps
+**/*.map
+
+# TypeScript source files (keep only compiled JS)
+**/*.ts
+!out/**/*.d.ts
+
+# Dependencies (they're bundled)
+node_modules/**
+
+# Build artifacts
+*.vsix
+
+# Documentation source files (keep only essentials)
+ARCHITECTURE.md
+MARKETPLACE.md
+media/README.md
+
+# Test files
+test/**
+.nyc_output/**
+coverage/**
+
+# Git files
+.git/**
+.github/**
+
+# Editor files
+.idea/**
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Temporary files
+*.tmp
+.cache/**
+
+# Keep only necessary documentation
+!README.md
+!CHANGELOG.md
+!LICENSE
+
+# Keep media assets
+!media/icon.png
+!media/icon.svg
+!media/banner.png
+!media/square-icon.png
+
+# Demo setup not needed in package
+demo-setup.sh
