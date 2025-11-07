@@ -8,12 +8,12 @@
   "icon": "media/icon.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/git-time-machine.git"
+    "url": "https://github.com/DilZhaan/git-time-machine.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/git-time-machine/issues"
+    "url": "https://github.com/DilZhaan/git-time-machine/issues"
   },
-  "homepage": "https://github.com/yourusername/git-time-machine#readme",
+  "homepage": "https://github.com/DilZhaan/git-time-machine#readme",
   "keywords": [
     "git",
     "commit",
@@ -44,6 +44,41 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "configuration": {
+      "title": "Git Time Machine",
+      "properties": {
+        "gitTimeMachine.telemetry.enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable anonymous telemetry to help improve Git Time Machine (no personal data collected)"
+        },
+        "gitTimeMachine.telemetry.hasPrompted": {
+          "type": "boolean",
+          "default": false,
+          "description": "Internal: Whether telemetry prompt has been shown"
+        },
+        "gitTimeMachine.backup.autoCreate": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically create backup branch before editing commits"
+        },
+        "gitTimeMachine.backup.autoDelete": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically delete backup branches after successful operations"
+        },
+        "gitTimeMachine.ui.showRelativeTime": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show relative time (e.g., '2 hours ago') instead of absolute timestamps"
+        },
+        "gitTimeMachine.safety.checkRemote": {
+          "type": "boolean",
+          "default": true,
+          "description": "Always check if commits exist on remote before editing"
+        }
+      }
+    },
     "commands": [
       {
         "command": "git-time-machine.showUnpushedCommits",
@@ -99,6 +134,16 @@
           "command": "git-time-machine.editCommit",
           "when": "view == gitTimeMachine && viewItem == unpushedCommit",
           "group": "inline"
+        },
+        {
+          "command": "git-time-machine.editCommit",
+          "when": "view == gitTimeMachine && viewItem == unpushedCommit",
+          "group": "navigation@1"
+        },
+        {
+          "command": "git-time-machine.editCommitFull",
+          "when": "view == gitTimeMachine && viewItem == unpushedCommit",
+          "group": "navigation@2"
         }
       ]
     }

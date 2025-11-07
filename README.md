@@ -131,7 +131,7 @@ Git Time Machine is a powerful VS Code extension that allows you to **safely edi
 ### From Source
 
 ```bash
-git clone https://github.com/yourusername/git-time-machine.git
+git clone https://github.com/DilZhaan/git-time-machine.git
 cd git-time-machine
 npm install
 npm run compile
@@ -312,7 +312,7 @@ Contributions are welcome! Here's how you can help:
 
 ### Reporting Bugs
 
-1. Check if the issue already exists in [Issues](https://github.com/yourusername/git-time-machine/issues)
+1. Check if the issue already exists in [Issues](https://github.com/DilZhaan/git-time-machine/issues)
 2. Create a new issue with:
    - Clear description
    - Steps to reproduce
@@ -344,7 +344,7 @@ Contributions are welcome! Here's how you can help:
 
 ```bash
 # Clone the repo
-git clone https://github.com/yourusername/git-time-machine.git
+git clone https://github.com/DilZhaan/git-time-machine.git
 cd git-time-machine
 
 # Install dependencies
@@ -423,8 +423,8 @@ Copyright (c) 2025 DilZhan YaPa
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/git-time-machine/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/git-time-machine/discussions)
+- **Issues**: [GitHub Issues](https://github.com/DilZhaan/git-time-machine/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/DilZhaan/git-time-machine/discussions)
 - **Email**: your.email@example.com
 
 ---
@@ -434,15 +434,15 @@ Copyright (c) 2025 DilZhan YaPa
 If you find Git Time Machine useful, please consider giving it a star on GitHub! It helps others discover the project.
 
 <p align="center">
-  <a href="https://github.com/yourusername/git-time-machine">
-    <img src="https://img.shields.io/github/stars/yourusername/git-time-machine?style=social" alt="GitHub Stars">
+  <a href="https://github.com/DilZhaan/git-time-machine">
+    <img src="https://img.shields.io/github/stars/DilZhaan/git-time-machine?style=social" alt="GitHub Stars">
   </a>
 </p>
 
 ---
 
 <p align="center">
-  Made with ❤️ by <a href="https://github.com/yourusername">DilZhan YaPa</a>
+  Made with ❤️ by <a href="https://github.com/DilZhaan">DilZhan YaPa</a>
 </p>
 
 <p align="center">

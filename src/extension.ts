@@ -4,6 +4,9 @@ import { CommitTreeProvider } from './views/commitTreeProvider';
 import { EditCommitCommand } from './commands/editCommit';
 import { BulkEditCommitsCommand } from './commands/bulkEditCommits';
 import { Git } from './lib/git';
+import { Telemetry } from './utils/telemetry';
+import { ErrorHandler, Validator } from './utils/errorHandler';
+import { Messages } from './utils/messages';
 
 /**
  * Get the workspace root path
@@ -21,11 +24,17 @@ function getWorkspaceRoot(): string | undefined {
  */
 export function activate(context: vscode.ExtensionContext) {
   console.log('Git Time Machine extension is now active');
+  
+  // Track activation
+  Telemetry.trackFeatureUsage(Telemetry.Events.EXTENSION_ACTIVATED);
+  
+  // Prompt for telemetry (only once)
+  setTimeout(() => Telemetry.promptForTelemetry(), 5000);
 
-  const workspaceRoot = getWorkspaceRoot();
+  const workspaceRoot = Validator.validateWorkspace();
 
   if (!workspaceRoot) {
-    vscode.window.showErrorMessage('Git Time Machine: No workspace folder open');
+    vscode.window.showErrorMessage(Messages.ERROR.NO_WORKSPACE);
     return;
   }
 
@@ -85,12 +94,36 @@ export function activate(context: vscode.ExtensionContext) {
   const editCommitCommand = vscode.commands.registerCommand(
     'git-time-machine.editCommit',
     async (commitTreeItem) => {
+      console.log('Edit commit called with:', commitTreeItem);
+      
+      let commit: any;
+      
+      // If no commit provided (called from Command Palette), show a picker
       if (!commitTreeItem || !commitTreeItem.commit) {
-        vscode.window.showErrorMessage('No commit selected');
-        return;
+        const unpushedResult = await gitService.getUnpushedCommits();
+        
+        if (unpushedResult.commits.length === 0) {
+          vscode.window.showInformationMessage('No unpushed commits found');
+          return;
+        }
+        
+        const selected = await vscode.window.showQuickPick(
+          unpushedResult.commits.map(c => ({
+            label: `$(git-commit) ${c.message}`,
+            description: `${c.shortHash} • ${c.author}`,
+            commit: c
+          })),
+          { placeHolder: 'Select a commit to edit' }
+        );
+        
+        if (!selected) {
+          return;
+        }
+        
+        commit = selected.commit;
+      } else {
+        commit = commitTreeItem.commit;
       }
-
-      const commit = commitTreeItem.commit;
 
       // Verify commit is safe to edit
       const isSafe = await gitService.isCommitSafeToEdit(commit.hash);

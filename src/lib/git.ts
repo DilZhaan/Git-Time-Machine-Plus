@@ -74,7 +74,7 @@ export class Git {
     if (!remoteBranch) {
       // No remote, get all commits
       const output = await this.exec(
-        'git log --format=%H|%s|%an|%ae|%at|%ct --all'
+        'git log --format="%H|%s|%an|%ae|%at|%ct" --all'
       );
       return this.parseCommits(output);
     }
@@ -85,13 +85,13 @@ export class Git {
       
       // Get commits ahead of remote
       const output = await this.exec(
-        `git log ${remoteBranch}..HEAD --format=%H|%s|%an|%ae|%at|%ct`
+        `git log ${remoteBranch}..HEAD --format="%H|%s|%an|%ae|%at|%ct"`
       );
       return this.parseCommits(output);
     } catch {
       // Remote might not exist, get all commits
       const output = await this.exec(
-        'git log --format=%H|%s|%an|%ae|%at|%ct'
+        'git log --format="%H|%s|%an|%ae|%at|%ct"'
       );
       return this.parseCommits(output);
     }
@@ -175,7 +175,7 @@ export class Git {
    * Get commit message
    */
   async getCommitMessage(hash: string): Promise<string> {
-    return await this.exec(`git log -1 --format=%B ${hash}`);
+    return await this.exec(`git log -1 --format="%B" ${hash}`);
   }
 
   /**

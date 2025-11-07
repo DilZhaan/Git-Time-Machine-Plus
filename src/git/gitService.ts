@@ -126,7 +126,7 @@ export class GitService {
       // Get commits that are ahead of remote
       try {
         const { stdout } = await execAsync(
-          `git log ${remoteBranch}..HEAD --format=%H|%an|%ae|%at|%s`,
+          `git log ${remoteBranch}..HEAD --format="%H|%an|%ae|%at|%s"`,
           { cwd: this.workspaceRoot }
         );
 
@@ -141,7 +141,7 @@ export class GitService {
         console.error('Error getting unpushed commits:', error);
         // If remote branch doesn't exist anymore, get all commits
         const { stdout } = await execAsync(
-          `git log --format=%H|%an|%ae|%at|%s`,
+          `git log --format="%H|%an|%ae|%at|%s"`,
           { cwd: this.workspaceRoot }
         );
 
