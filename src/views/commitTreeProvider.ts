@@ -3,7 +3,7 @@ import { GitCommit, UnpushedCommitsResult } from '../types';
 import { GitService } from '../git/gitService';
 
 /**
- * Tree item representing a commit
+ * Tree item representing a commmit
  */
 export class CommitTreeItem extends vscode.TreeItem {
   constructor(
