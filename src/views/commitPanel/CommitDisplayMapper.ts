@@ -4,7 +4,7 @@
  */
 
 import { GitCommit } from '../../types';
-import { CommitDisplayInfo } from './types';
+import { CommitDisplayInfo } from './';
 
 export class CommitDisplayMapper {
   /**

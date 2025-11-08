@@ -5,9 +5,11 @@
  */
 
 import * as vscode from 'vscode';
-import { StyleBuilder } from './StyleBuilder';
-import { HtmlTemplateBuilder } from './HtmlTemplateBuilder';
-import { WebviewScriptBuilder } from './WebviewScriptBuilder';
+import {
+  StyleBuilder,
+  HtmlTemplateBuilder,
+  WebviewScriptBuilder
+} from './';
 
 export class CommitPanelHtmlBuilder {
   private readonly styleBuilder: StyleBuilder;

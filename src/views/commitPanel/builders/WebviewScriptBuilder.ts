@@ -3,11 +3,13 @@
  * Follows Single Responsibility Principle - assembles client-side logic
  */
 
-import { StateManagerScript } from './clientScripts/StateManager';
-import { CommitRendererScript } from './clientScripts/CommitRenderer';
-import { ViewManagerScript } from './clientScripts/ViewManager';
-import { EventHandlerScript } from './clientScripts/EventHandler';
-import { MessageHandlerScript } from './clientScripts/MessageHandler';
+import {
+  StateManagerScript,
+  CommitRendererScript,
+  ViewManagerScript,
+  EventHandlerScript,
+  MessageHandlerScript
+} from './clientScripts';
 
 export class WebviewScriptBuilder {
   /**

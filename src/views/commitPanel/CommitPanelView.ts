@@ -6,11 +6,14 @@
 import * as vscode from 'vscode';
 import { GitService } from '../../git/gitService';
 import { GitCommit } from '../../types';
-import { CommitDisplayInfo, EditInfo, UnpushedCommitsData } from './types';
-import { CommitDisplayMapper } from './CommitDisplayMapper';
-import { CommitEditService } from './CommitEditService';
-import { WebviewMessageHandler, IWebviewMessageDelegate } from './WebviewMessageHandler';
-import { CommitPanelHtmlBuilder } from './builders/CommitPanelHtmlBuilder';
+import {
+  EditInfo,
+  CommitDisplayMapper,
+  CommitEditService,
+  WebviewMessageHandler,
+  IWebviewMessageDelegate,
+  CommitPanelHtmlBuilder
+} from './';
 
 /**
  * Commit Panel View Provider
