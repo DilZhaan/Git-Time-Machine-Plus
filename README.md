@@ -147,7 +147,7 @@ Perfect for developers who want to maintain a clean, professional commit history
 ### From Source
 
 ```bash
-git clone https://github.com/DilZhaan/git-time-machine.git
+git clone https://github.com/DilZhaan/Git-Time-Machine-Plus.git
 cd git-time-machine
 npm install
 npm run compile
@@ -429,7 +429,7 @@ Contributions are welcome! Here's how you can help:
 
 ### Reporting Bugs
 
-1. Check if the issue already exists in [Issues](https://github.com/DilZhaan/git-time-machine/issues)
+1. Check if the issue already exists in [Issues](https://github.com/DilZhaan/Git-Time-Machine-Plus/issues)
 2. Create a new issue with:
    - Clear description
    - Steps to reproduce
@@ -461,7 +461,7 @@ Contributions are welcome! Here's how you can help:
 
 ```bash
 # Clone the repo
-git clone https://github.com/DilZhaan/git-time-machine.git
+git clone https://github.com/DilZhaan/Git-Time-Machine-Plus.git
 cd git-time-machine
 
 # Install dependencies
@@ -541,8 +541,8 @@ Copyright (c) 2025 DilZhan YaPa
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/DilZhaan/git-time-machine/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/DilZhaan/git-time-machine/discussions)
+- **Issues**: [GitHub Issues](https://github.com/DilZhaan/Git-Time-Machine-Plus/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/DilZhaan/Git-Time-Machine-Plus/discussions)
 - **Email**: dilzhanyapa@gmail.com
 
 ---
@@ -552,7 +552,7 @@ Copyright (c) 2025 DilZhan YaPa
 If you find Git Time Machine useful, please consider giving it a star on GitHub! It helps others discover the project.
 
 <p align="center">
-  <a href="https://github.com/DilZhaan/git-time-machine">
+  <a href="https://github.com/DilZhaan/Git-Time-Machine-Plus">
     <img src="https://img.shields.io/github/stars/DilZhaan/git-time-machine?style=social" alt="GitHub Stars">
   </a>
 </p>

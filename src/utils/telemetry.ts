@@ -75,7 +75,7 @@ export class Telemetry {
     );
 
     if (choice === 'Learn More') {
-      vscode.env.openExternal(vscode.Uri.parse('https://github.com/DilZhaan/git-time-machine#privacy'));
+      vscode.env.openExternal(vscode.Uri.parse('https://github.com/DilZhaan/Git-Time-Machine-Plus#privacy'));
       return;
     }
 
