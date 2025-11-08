@@ -55,7 +55,8 @@ export class CommitPanelView implements vscode.WebviewViewProvider, IWebviewMess
       enableScripts: true,
       localResourceRoots: [
         this.extensionUri,
-        vscode.Uri.joinPath(this.extensionUri, 'node_modules', '@vscode/codicons')
+        vscode.Uri.joinPath(this.extensionUri, 'node_modules', '@vscode/codicons'),
+        vscode.Uri.joinPath(this.extensionUri, 'node_modules', '@vscode/webview-ui-toolkit')
       ]
     };
 
