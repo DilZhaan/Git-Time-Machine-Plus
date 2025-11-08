@@ -106,11 +106,14 @@ export class EventHandlerScript {
           const saveEditBtn = document.getElementById('saveEditBtn');
           if (saveEditBtn) {
             saveEditBtn.addEventListener('click', () => {
+              const dateInput = document.getElementById('editDate');
+              const dateValue = dateInput ? dateInput.value : '';
+              
               const edit = {
                 hash: document.getElementById('editHashFull').value,
                 newMessage: document.getElementById('editMessage').value,
-                newAuthorDate: document.getElementById('editAuthorDate').value,
-                newCommitDate: document.getElementById('editCommitDate').value
+                newAuthorDate: dateValue,
+                newCommitDate: dateValue  // Same date for both
               };
               vscode.postMessage({ type: 'saveEdit', edit });
             });
@@ -130,11 +133,12 @@ export class EventHandlerScript {
             applyAllBtn.addEventListener('click', () => {
               const edits = [];
               document.querySelectorAll('.bulk-edit-item').forEach(item => {
+                const dateValue = item.querySelector('.bulk-date').value;
                 edits.push({
                   hash: item.dataset.hash,
                   newMessage: item.querySelector('.bulk-message').value,
-                  newAuthorDate: item.querySelector('.bulk-author-date').value,
-                  newCommitDate: item.querySelector('.bulk-commit-date').value
+                  newAuthorDate: dateValue,
+                  newCommitDate: dateValue  // Same date for both
                 });
               });
               vscode.postMessage({ type: 'applyAllEdits', edits });

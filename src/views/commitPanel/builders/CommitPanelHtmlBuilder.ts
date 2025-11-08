@@ -54,14 +54,11 @@ export class CommitPanelHtmlBuilder {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta http-equiv="Content-Security-Policy" content="default-src 'none'; 
-        style-src ${webview.cspSource} https://cdn.jsdelivr.net 'unsafe-inline'; 
-        script-src 'nonce-${nonce}' ${webview.cspSource} https://cdn.jsdelivr.net; 
+        style-src ${webview.cspSource} 'unsafe-inline'; 
+        script-src 'nonce-${nonce}' ${webview.cspSource}; 
         font-src ${webview.cspSource} data:;
         img-src ${webview.cspSource} https:;">
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
       <link href="${codiconsUri}" rel="stylesheet" />
-      <script nonce="${nonce}" src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
       <script nonce="${nonce}" type="module" src="${toolkitUri}"></script>
       <title>Git Time Machine Plus</title>
     `;

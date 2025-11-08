@@ -256,6 +256,7 @@ export class StyleBuilder {
         overflow-x: hidden;
         gap: 12px;
         min-height: 0;
+        position: relative;
       }
       @keyframes slideIn {
         from {
@@ -292,13 +293,26 @@ export class StyleBuilder {
         min-height: 80px;
       }
       .date-input {
-        cursor: pointer !important;
+        width: 100%;
+        padding: 8px 12px;
+        font-size: 13px;
+        font-family: var(--vscode-font-family);
+        color: var(--vscode-input-foreground);
+        background-color: var(--vscode-input-background);
+        border: 1px solid var(--vscode-input-border);
+        border-radius: 2px;
+        cursor: pointer;
       }
-      .date-input::part(control) {
-        cursor: pointer !important;
+      .date-input:focus {
+        outline: 1px solid var(--vscode-focusBorder);
+        outline-offset: -1px;
       }
-      .date-input input {
-        cursor: pointer !important;
+      .date-input::-webkit-calendar-picker-indicator {
+        cursor: pointer;
+        filter: invert(0.5);
+      }
+      .date-input::-webkit-datetime-edit {
+        padding: 0;
       }
       .form-label {
         display: flex;
@@ -355,17 +369,6 @@ export class StyleBuilder {
         flex-direction: column;
         gap: 12px;
         min-width: 0;
-      }
-      .bulk-edit-item-dates {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 12px;
-        min-width: 0;
-      }
-      @media (max-width: 600px) {
-        .bulk-edit-item-dates {
-          grid-template-columns: 1fr;
-        }
       }
       .bulk-edit-message-field {
         width: 100%;
@@ -428,6 +431,7 @@ export class StyleBuilder {
       }
     `;
   }
+
 
   private getScrollbarStyles(): string {
     return `

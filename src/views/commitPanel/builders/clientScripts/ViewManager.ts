@@ -29,39 +29,30 @@ export class ViewManagerScript {
           document.getElementById('editView').classList.remove('hidden');
 
           this.populateEditForm(commit);
-          this.initializeDatePickers(commit);
         }
 
         populateEditForm(commit) {
           document.getElementById('editHash').value = commit.shortHash;
           document.getElementById('editHashFull').value = commit.hash;
           document.getElementById('editMessage').value = commit.message;
+          
+          // Set the datetime-local input value
+          const dateInput = document.getElementById('editDate');
+          if (dateInput) {
+            // Convert ISO date to datetime-local format (YYYY-MM-DDTHH:mm)
+            const date = new Date(commit.authorDate);
+            const localDateTime = this.formatDateTimeLocal(date);
+            dateInput.value = localDateTime;
+          }
         }
 
-        initializeDatePickers(commit) {
-          this.state.destroyDatePickers();
-
-          const authorPicker = flatpickr('#editAuthorDate', {
-            enableTime: true,
-            dateFormat: 'Y-m-d H:i',
-            defaultDate: commit.authorDate,
-            time_24hr: true,
-            position: 'auto',
-            static: false,
-            appendTo: document.body
-          });
-
-          const commitPicker = flatpickr('#editCommitDate', {
-            enableTime: true,
-            dateFormat: 'Y-m-d H:i',
-            defaultDate: commit.commitDate,
-            time_24hr: true,
-            position: 'auto',
-            static: false,
-            appendTo: document.body
-          });
-
-          this.state.setDatePickers(authorPicker, commitPicker);
+        formatDateTimeLocal(date) {
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const day = String(date.getDate()).padStart(2, '0');
+          const hours = String(date.getHours()).padStart(2, '0');
+          const minutes = String(date.getMinutes()).padStart(2, '0');
+          return \`\${year}-\${month}-\${day}T\${hours}:\${minutes}\`;
         }
 
         showBulkEditMode(commits) {
@@ -77,10 +68,12 @@ export class ViewManagerScript {
         renderBulkEditList(commits) {
           const list = document.getElementById('bulkEditList');
           list.innerHTML = commits.map((c, index) => this.createBulkEditItem(c, index)).join('');
-          this.initializeBulkDatePickers();
         }
 
         createBulkEditItem(commit, index) {
+          const date = new Date(commit.authorDate);
+          const localDateTime = this.formatDateTimeLocal(date);
+          
           return \`
             <div class="bulk-edit-item" data-hash="\${commit.hash}">
               <div class="bulk-edit-item-header">
@@ -94,41 +87,15 @@ export class ViewManagerScript {
                 </label>
                 <vscode-text-area class="bulk-message bulk-edit-message-field" rows="3" resize="vertical">\${this.escapeHtml(commit.message)}</vscode-text-area>
               </div>
-              <div class="bulk-edit-item-dates">
-                <div class="form-group">
-                  <label class="form-label">
-                    <i class="codicon codicon-calendar"></i>
-                    Author Date
-                  </label>
-                  <vscode-text-field class="bulk-author-date" 
-                         value="\${new Date(commit.authorDate).toISOString().slice(0, 16).replace('T', ' ')}">
-                  </vscode-text-field>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">
-                    <i class="codicon codicon-clock"></i>
-                    Commit Date
-                  </label>
-                  <vscode-text-field class="bulk-commit-date" 
-                         value="\${new Date(commit.commitDate).toISOString().slice(0, 16).replace('T', ' ')}">
-                  </vscode-text-field>
-                </div>
+              <div class="form-group">
+                <label class="form-label">
+                  <i class="codicon codicon-calendar"></i>
+                  Date & Time
+                </label>
+                <input type="datetime-local" class="bulk-date date-input" value="\${localDateTime}" />
               </div>
             </div>
           \`;
-        }
-
-        initializeBulkDatePickers() {
-          document.querySelectorAll('.bulk-author-date, .bulk-commit-date').forEach(input => {
-            flatpickr(input, {
-              enableTime: true,
-              dateFormat: 'Y-m-d H:i',
-              time_24hr: true,
-              position: 'auto',
-              static: false,
-              appendTo: document.body
-            });
-          });
         }
 
         escapeHtml(text) {

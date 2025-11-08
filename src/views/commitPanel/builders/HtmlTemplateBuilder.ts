@@ -110,16 +110,9 @@ export class HtmlTemplateBuilder {
       <div class="form-group">
         <label class="form-label">
           <i class="codicon codicon-calendar"></i>
-          Author Date
+          Date & Time
         </label>
-        <vscode-text-field id="editAuthorDate" class="date-input"></vscode-text-field>
-      </div>
-      <div class="form-group">
-        <label class="form-label">
-          <i class="codicon codicon-clock"></i>
-          Commit Date
-        </label>
-        <vscode-text-field id="editCommitDate" class="date-input"></vscode-text-field>
+        <input type="datetime-local" id="editDate" class="date-input" />
       </div>
     `;
   }

@@ -15,8 +15,6 @@ export class StateManagerScript {
           this.selectedHashes = new Set();
           this.currentMode = 'list'; // 'list', 'edit', 'bulk'
           this.isUpdatingSelectAll = false;
-          this.authorDatePicker = null;
-          this.commitDatePicker = null;
         }
 
         setCommits(commits) {
@@ -81,20 +79,6 @@ export class StateManagerScript {
 
         isUpdating() {
           return this.isUpdatingSelectAll;
-        }
-
-        setDatePickers(authorPicker, commitPicker) {
-          this.authorDatePicker = authorPicker;
-          this.commitDatePicker = commitPicker;
-        }
-
-        destroyDatePickers() {
-          if (this.authorDatePicker) {
-            this.authorDatePicker.destroy();
-          }
-          if (this.commitDatePicker) {
-            this.commitDatePicker.destroy();
-          }
         }
       }
     `;
