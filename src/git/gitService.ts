@@ -325,10 +325,16 @@ sed -i.bak "s/^pick ${commitHash.substring(0, 7)}/edit ${commitHash.substring(0,
         }
       });
 
-      // Step 3: Continue the rebase
-      await execAsync('git rebase --continue', {
-        cwd: this.workspaceRoot
-      });
+      // Step 3: Continue the rebase (only if still in progress)
+      const gitDir = path.join(this.workspaceRoot, '.git');
+      const rebaseMergeDir = path.join(gitDir, 'rebase-merge');
+      const rebaseApplyDir = path.join(gitDir, 'rebase-apply');
+      
+      if (fs.existsSync(rebaseMergeDir) || fs.existsSync(rebaseApplyDir)) {
+        await execAsync('git rebase --continue', {
+          cwd: this.workspaceRoot
+        });
+      }
 
       // Clean up the script file
       fs.unlinkSync(scriptPath);

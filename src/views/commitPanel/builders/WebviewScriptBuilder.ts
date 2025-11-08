@@ -1,0 +1,67 @@
+/**
+ * Builder for webview client-side scripts
+ * Follows Single Responsibility Principle - assembles client-side logic
+ */
+
+import { StateManagerScript } from './clientScripts/StateManager';
+import { CommitRendererScript } from './clientScripts/CommitRenderer';
+import { ViewManagerScript } from './clientScripts/ViewManager';
+import { EventHandlerScript } from './clientScripts/EventHandler';
+import { MessageHandlerScript } from './clientScripts/MessageHandler';
+
+export class WebviewScriptBuilder {
+  /**
+   * Build complete client-side script
+   */
+  public buildScript(nonce: string): string {
+    return `
+      <script nonce="${nonce}">
+        (function() {
+          // Acquire VS Code API
+          const vscode = acquireVsCodeApi();
+          console.log('Git Time Machine Plus webview loaded');
+
+          ${StateManagerScript.generate()}
+          ${CommitRendererScript.generate()}
+          ${ViewManagerScript.generate()}
+          ${EventHandlerScript.generate()}
+          ${MessageHandlerScript.generate()}
+
+          /**
+           * Application - Main application controller
+           */
+          class Application {
+            constructor() {
+              this.state = new StateManager();
+              this.renderer = new CommitRenderer(this.state);
+              this.viewManager = new ViewManager(this.state);
+              this.eventHandler = new EventHandler(this.state, this.renderer, this.viewManager);
+              this.messageHandler = new MessageHandler(this.state, this.renderer, this.viewManager);
+            }
+
+            async initialize() {
+              console.log('Initializing webview application...');
+              await this.eventHandler.initializeEventListeners();
+              this.messageHandler.initializeMessageListener();
+              console.log('✅ Application initialized');
+            }
+          }
+
+          // Global functions for inline event handlers (needed for onclick attributes)
+          window.editCommit = function(hash) {
+            vscode.postMessage({ type: 'editCommit', hash });
+          };
+
+          // Initialize application
+          const app = new Application();
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => app.initialize());
+          } else {
+            app.initialize();
+          }
+        })();
+      </script>
+    `;
+  }
+}
+

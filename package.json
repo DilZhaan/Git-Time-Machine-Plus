@@ -109,8 +109,27 @@
         "command": "git-time-machine.undo",
         "title": "Git Time Machine: Undo Changes (Restore Backup)",
         "icon": "$(discard)"
+      },
+      {
+        "command": "git-time-machine.openPanelView",
+        "title": "Git Time Machine: Open in Panel",
+        "icon": "$(window)"
+      },
+      {
+        "command": "git-time-machine.refreshPanelView",
+        "title": "Refresh Panel View",
+        "icon": "$(refresh)"
       }
     ],
+    "viewsContainers": {
+      "panel": [
+        {
+          "id": "gitTimeMachinePanel",
+          "title": "Git Time Machine",
+          "icon": "$(history)"
+        }
+      ]
+    },
     "views": {
       "scm": [
         {
@@ -119,13 +138,37 @@
           "icon": "$(history)",
           "contextualTitle": "Unpushed Commits"
         }
+      ],
+      "gitTimeMachinePanel": [
+        {
+          "id": "gitTimeMachinePanelView",
+          "name": "Unpushed Commits",
+          "type": "webview",
+          "contextualTitle": "Git Time Machine"
+        }
       ]
     },
+    "viewsWelcome": [
+      {
+        "view": "gitTimeMachinePanelView",
+        "contents": "No unpushed commits found.\n[Refresh](command:git-time-machine.refreshPanelView)"
+      }
+    ],
     "menus": {
       "view/title": [
         {
           "command": "git-time-machine.refreshView",
           "when": "view == gitTimeMachine",
+          "group": "navigation@1"
+        },
+        {
+          "command": "git-time-machine.openPanelView",
+          "when": "view == gitTimeMachine",
+          "group": "navigation@2"
+        },
+        {
+          "command": "git-time-machine.refreshPanelView",
+          "when": "view == gitTimeMachinePanelView",
           "group": "navigation"
         }
       ],
@@ -175,5 +218,9 @@
     "ovsx": "^0.8.4",
     "rimraf": "^5.0.10",
     "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@vscode/codicons": "^0.0.35",
+    "@vscode/webview-ui-toolkit": "^1.4.0"
   }
 }

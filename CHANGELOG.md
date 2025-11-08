@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- 🎨 **Bottom Panel View**: New webview panel in the bottom panel area (like Problems, Output, Terminal)
+  - Same rich UI as sidebar with commit editing capabilities
+  - Search, filter, and bulk edit commits
+  - Visual date picker with flatpickr integration
+  - Live refresh on git changes
+  - Can be used alongside the sidebar tree view
+- 🔗 **Dual View Support**: Switch between sidebar and bottom panel views
+  - Button in sidebar to open bottom panel
+  - Both views stay in sync automatically
+  - GitLens-style multi-view approach
+- 📦 **New Commands**:
+  - `git-time-machine.openPanelView`: Open the bottom panel view
+  - `git-time-machine.refreshPanelView`: Refresh the bottom panel
+
 ### Planned Features
 - Support for editing non-HEAD commits via interactive rebase
 - Commit message templates

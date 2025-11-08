@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { GitService } from './git/gitService';
 import { CommitTreeProvider } from './views/commitTreeProvider';
+import { CommitPanelView } from './views/commitPanel';
 import { EditCommitCommand } from './commands/editCommit';
 import { BulkEditCommitsCommand } from './commands/bulkEditCommits';
 import { Git } from './lib/git';
@@ -42,13 +43,31 @@ export function activate(context: vscode.ExtensionContext) {
   const gitService = new GitService(workspaceRoot);
   const commitTreeProvider = new CommitTreeProvider(gitService);
 
-  // Register tree view
+  // Register tree view (sidebar)
   const treeView = vscode.window.createTreeView('gitTimeMachine', {
     treeDataProvider: commitTreeProvider,
     showCollapseAll: false,
   });
 
   context.subscriptions.push(treeView);
+
+  // Register webview panel view (bottom panel)
+  const commitPanelView = new CommitPanelView(
+    context.extensionUri,
+    gitService
+  );
+  
+  context.subscriptions.push(
+    vscode.window.registerWebviewViewProvider(
+      'gitTimeMachinePanelView',
+      commitPanelView,
+      {
+        webviewOptions: {
+          retainContextWhenHidden: true
+        }
+      }
+    )
+  );
 
   // Register command: Show unpushed commits
   const showUnpushedCommand = vscode.commands.registerCommand(
@@ -240,6 +259,22 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
+  // Register command: Open panel view
+  const openPanelViewCommand = vscode.commands.registerCommand(
+    'git-time-machine.openPanelView',
+    async () => {
+      await vscode.commands.executeCommand('gitTimeMachinePanelView.focus');
+    }
+  );
+
+  // Register command: Refresh panel view
+  const refreshPanelViewCommand = vscode.commands.registerCommand(
+    'git-time-machine.refreshPanelView',
+    async () => {
+      await commitPanelView.refresh();
+    }
+  );
+
   // Register command: Undo changes (checkout backup branch)
   let lastBulkEditCommand: BulkEditCommitsCommand | null = null;
   const undoCommand = vscode.commands.registerCommand(
@@ -294,7 +329,9 @@ export function activate(context: vscode.ExtensionContext) {
     editCommitCommand,
     editCommitFullCommand,
     bulkEditCommand,
-    undoCommand
+    undoCommand,
+    openPanelViewCommand,
+    refreshPanelViewCommand
   );
 
   // Initial load
@@ -308,6 +345,7 @@ export function activate(context: vscode.ExtensionContext) {
     }
     refreshTimeout = setTimeout(() => {
       commitTreeProvider.refresh();
+      commitPanelView.refresh();
     }, 500); // Wait 500ms before refreshing
   };
 
