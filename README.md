@@ -1,92 +1,106 @@
-# Git Time Machine ⏰
+# Git Time Machine Plus ⏰
 
 <p align="center">
   <img src="media/icon.png" alt="Git Time Machine Logo" width="128" height="128">
 </p>
 
 <p align="center">
-  <strong>Safely edit commit messages and timestamps for unpushed commits</strong>
+  <strong>Professional Git history management for VS Code</strong><br>
+  <em>Safely edit commit messages and timestamps before pushing</em>
 </p>
 
 <p align="center">
   <a href="https://marketplace.visualstudio.com/items?itemName=DilZhanYapa.git-time-machine">
-    <img src="https://img.shields.io/visual-studio-marketplace/v/DilZhanYapa.git-time-machine?color=007ACC&label=VS%20Code%20Marketplace" alt="VS Code Marketplace">
+    <img src="https://img.shields.io/visual-studio-marketplace/v/DilZhanYapa.git-time-machine?color=007ACC&label=VS%20Code%20Marketplace&logo=visual-studio-code" alt="VS Code Marketplace">
   </a>
   <a href="https://marketplace.visualstudio.com/items?itemName=DilZhanYapa.git-time-machine">
-    <img src="https://img.shields.io/visual-studio-marketplace/d/DilZhanYapa.git-time-machine?color=4EC9B0" alt="Downloads">
+    <img src="https://img.shields.io/visual-studio-marketplace/d/DilZhanYapa.git-time-machine?color=4EC9B0&logo=visual-studio-code" alt="Downloads">
   </a>
   <a href="https://marketplace.visualstudio.com/items?itemName=DilZhanYapa.git-time-machine">
-    <img src="https://img.shields.io/visual-studio-marketplace/r/DilZhanYapa.git-time-machine?color=4EC9B0" alt="Rating">
+    <img src="https://img.shields.io/visual-studio-marketplace/r/DilZhanYapa.git-time-machine?color=4EC9B0&logo=visual-studio-code" alt="Rating">
   </a>
   <a href="LICENSE">
     <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License">
   </a>
+  <img src="https://img.shields.io/badge/version-1.0.0-brightgreen.svg" alt="Version 1.0.0">
 </p>
 
 ---
 
-## 📖 What is Git Time Machine?
+## 📖 What is Git Time Machine Plus?
 
-Git Time Machine is a powerful VS Code extension that allows you to **safely edit commit messages and timestamps** for commits that haven't been pushed to a remote repository. Whether you need to fix a typo, update commit dates, or clean up your commit history before pushing, Git Time Machine makes it easy and safe.
+**Git Time Machine Plus** is a production-ready VS Code extension that provides professional-grade tools for managing your Git commit history. It allows you to **safely edit commit messages and timestamps** for unpushed commits with an intuitive, dual-view interface inspired by GitLens.
 
-### 🎯 Why Git Time Machine?
+Perfect for developers who want to maintain a clean, professional commit history before pushing to remote repositories.
 
-- ✅ **Safety First**: Only allows editing unpushed commits
-- ✅ **Automatic Detection**: Scans and identifies unpushed commits automatically
-- ✅ **Beautiful UI**: Modern webview interface with Tailwind CSS and smooth animations
-- ✅ **Bulk Editing**: Edit multiple commits at once
-- ✅ **Visual Date Picker**: Flatpickr integration for easy timestamp selection
-- ✅ **Backup Branch**: Automatically creates backup before making changes
-- ✅ **Undo Support**: Easily restore from backup if needed
-- ✅ **Dark & Light Themes**: Matches your VS Code theme
+### 🎯 Why Choose Git Time Machine Plus?
+
+- 🛡️ **Safety First**: Enterprise-grade safety checks - only edits unpushed commits
+- 🎨 **Dual View Interface**: Sidebar tree view + bottom panel (like GitLens)
+- 🚀 **Production Ready**: Stable v1.0.0 release with SOLID architecture
+- 🔍 **Smart Detection**: Automatically identifies unpushed commits
+- ✨ **Modern UI**: Beautiful webview with VSCode Webview UI Toolkit
+- 📦 **Bulk Operations**: Edit multiple commits efficiently
+- 📅 **Native Date Picker**: Integrated datetime picker matching VSCode theme
+- 💾 **Automatic Backups**: Safety net with automatic backup branches
+- ↩️ **One-Click Undo**: Restore from backup instantly
+- 🌓 **Theme Aware**: Seamlessly matches VSCode dark and light themes
+- ⚡ **Live Updates**: Real-time synchronization across all views
 
 ---
 
 ## 🎬 Demo
 
-> **Note**: Demo GIF coming soon! The extension is fully functional.
+> **Note**: Screenshots and demo GIF coming soon! The extension is fully functional and production-ready.
 
-<!-- ![Demo GIF](media/demo.gif) -->
+### Available Views
 
-**Screenshot Placeholders:**
+**1. Sidebar Tree View** - Quick access in Source Control panel  
+**2. Bottom Panel View** - Full-featured panel alongside Problems, Output, Terminal  
+**3. Visual Date/Time Picker** - Native datetime input with VSCode theme integration  
+**4. Bulk Edit Summary** - Review all changes before applying
 
-### Main View - Unpushed Commits
-<!-- ![Unpushed Commits View](media/screenshots/unpushed-commits.png) -->
-
-### Date/Time Picker Webview
-<!-- ![Date Picker](media/screenshots/date-picker.png) -->
-
-### Bulk Edit Summary
-<!-- ![Summary View](media/screenshots/summary.png) -->
+<!--
+![Demo GIF](media/demo.gif)
+![Sidebar View](media/screenshots/sidebar-view.png)
+![Bottom Panel View](media/screenshots/bottom-panel.png)
+![Date Picker](media/screenshots/date-picker.png)
+![Summary View](media/screenshots/summary.png)
+-->
 
 ---
 
 ## ✨ Features
 
 ### 🔍 Automatic Unpushed Commit Detection
+
 - Automatically detects commits that haven't been pushed to remote
 - Displays them in a dedicated tree view in the Source Control panel
 - Shows commit hash, author, message, and relative time
 - Works with branches that have remote tracking or standalone branches
 
 ### ✏️ Edit Commit Messages
+
 - Edit commit messages with a simple input box
 - Validation to prevent empty messages
 - Works for HEAD and older commits
 
 ### 📅 Edit Commit Timestamps
+
 - Visual date/time picker with calendar interface
 - Separate controls for Author Date and Commit Date
 - Sync button to match dates easily
 - Supports multiple date formats
 
 ### 📦 Bulk Edit Multiple Commits
+
 - Select multiple commits using multi-select QuickPick
 - Edit each commit's message and timestamp in sequence
 - Beautiful summary table before applying changes
 - Progress indicators during processing
 
 ### 🛡️ Safety Features
+
 - **Remote Check**: Automatically verifies commits aren't on remote
 - **Backup Branch**: Creates backup branch before any changes
 - **Undo Command**: Restore from backup with one command
@@ -94,6 +108,7 @@ Git Time Machine is a powerful VS Code extension that allows you to **safely edi
 - **Confirmation Dialogs**: Always confirms before making changes
 
 ### 🎨 Beautiful UI
+
 - Modern Tailwind CSS styling
 - Smooth fade and slide animations
 - Responsive design
@@ -102,6 +117,7 @@ Git Time Machine is a powerful VS Code extension that allows you to **safely edi
 - Progress animations
 
 ### 📊 Tree View Integration
+
 - Integrated into VS Code's Source Control panel
 - Shows all unpushed commits at a glance
 - Inline edit buttons for quick access
@@ -142,57 +158,138 @@ npm run compile
 
 ## 🚀 Usage
 
-### Method 1: Quick Edit from Tree View
+### Quick Start
 
-1. Open a git repository in VS Code
-2. Open the **Source Control** panel (`Ctrl+Shift+G` / `Cmd+Shift+G`)
-3. Look for the **Git Time Machine** section
-4. Click the **✏️ edit icon** next to any commit
-5. Choose what to edit (message, timestamp, or both)
-6. Follow the prompts
+1. **Open a git repository** in VS Code
+2. **Open Source Control** panel (`Ctrl+Shift+G` / `Cmd+Shift+G`)
+3. **Find "Git Time Machine"** section - your unpushed commits are listed
+4. **Choose your workflow** below based on your needs
 
-### Method 2: Single Commit Edit (Full Flow)
+---
+
+### Method 1: Sidebar Tree View (Quick Access)
+
+**Best for:** Quick edits, checking unpushed commits at a glance
+
+1. Open the **Source Control** panel
+2. Locate the **"Git Time Machine"** section
+3. Click the **✏️ edit icon** next to any commit
+4. Choose what to edit (message, timestamp, or both)
+5. Make your changes and confirm
+
+**Features:**
+
+- ✅ Always visible in Source Control
+- ✅ One-click access to any commit
+- ✅ Refresh button to rescan
+- ✅ Tooltips with full commit details
+
+---
+
+### Method 2: Bottom Panel View (Immersive Experience)
+
+**Best for:** Detailed work, bulk operations, comparing commits
+
+1. Open Command Palette (`Ctrl+Shift+P` / `Cmd+Shift+P`)
+2. Type: **"Git Time Machine: Open Panel View"**
+3. The panel opens at the bottom (like Problems, Output, Terminal)
+4. Browse, filter, and edit commits with full interface
+5. Panel stays in sync with sidebar view
+
+**Features:**
+
+- ✅ More screen space for commit details
+- ✅ Search and filter capabilities
+- ✅ Side-by-side with other panels
+- ✅ Full commit editing interface
+- ✅ Live refresh on git changes
+
+**Tip:** You can use both sidebar and bottom panel views simultaneously!
+
+---
+
+### Method 3: Single Commit Edit (Full Flow)
+
+**Best for:** Guided workflow for editing one commit
 
 1. Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac)
-2. Type: **"Git Time Machine: Edit Commit (Full Flow with Webview)"**
-3. Select a commit from the QuickPick
+2. Type: **"Git Time Machine: Edit Commit (Full Flow)"**
+3. Select a commit from the list
 4. Choose to edit message and/or timestamp
-5. Use the visual date/time picker if editing timestamp
-6. Confirm your changes
+5. Use the integrated datetime picker if editing dates
+6. Review the summary and confirm
 
-### Method 3: Bulk Edit Multiple Commits
+**Safety Steps:**
+
+1. ✅ Automatic safety checks
+2. ✅ Backup branch creation
+3. ✅ Preview of all changes
+4. ✅ Final confirmation dialog
+
+---
+
+### Method 4: Bulk Edit Multiple Commits
+
+**Best for:** Cleaning up multiple commits before push
 
 1. Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac)
 2. Type: **"Git Time Machine: Bulk Edit Multiple Commits"**
-3. **Multi-select commits** using the space bar
-4. For each commit:
+3. **Multi-select commits** using space bar (⬚ → ☑)
+4. For each selected commit:
    - Choose whether to edit message
    - Choose whether to edit timestamp
-   - Use the visual picker for dates
-5. Review the summary table with all changes
-6. Confirm to apply all changes at once
+   - Make your changes
+5. Review the **Summary Table** with all changes
+6. Confirm to apply all edits atomically
 
-### Undo Changes
+**Progress Tracking:**
 
-If you need to undo your changes:
+- 📊 Shows "Editing commit X of Y"
+- ⚙️ Progress bar during processing
+- ✅ Success confirmation with undo option
+
+---
+
+### Undo Changes (Safety Net)
+
+**If you need to revert your changes:**
 
 1. Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac)
-2. Type: **"Git Time Machine: Undo Changes (Restore Backup)"**
-3. Select the backup branch to restore
-4. Confirm the restoration
+2. Type: **"Git Time Machine: Undo Changes"**
+3. Select the backup branch (auto-created during edit)
+4. Confirm restoration
+
+**Note:** Backup branches are named: `<branch>-gittimemachine-<timestamp>`
+
+---
+
+### Refresh Commits
+
+**To rescan for unpushed commits:**
+
+1. Click the **refresh icon** (🔄) in the sidebar view, OR
+2. Use Command Palette: **"Git Time Machine: Refresh"**
+
+**Auto-refresh:** The extension automatically refreshes when:
+
+- Files change in the repository
+- Git operations complete
+- Branch switches occur
 
 ---
 
 ## 🎹 Commands
 
-| Command | Description | Keyboard Shortcut |
-|---------|-------------|-------------------|
-| `Git Time Machine: Show Unpushed Commits` | Display all unpushed commits from current branch | - |
-| `Git Time Machine: Edit Commit` | Quick edit from tree view (simple) | - |
-| `Git Time Machine: Edit Commit (Full Flow with Webview)` | Complete guided flow with visual date/time picker | - |
-| `Git Time Machine: Bulk Edit Multiple Commits` | Edit multiple commits at once | - |
-| `Git Time Machine: Undo Changes (Restore Backup)` | Restore from backup branch | - |
-| `Refresh` | Reload the unpushed commits list | - |
+| Command                                           | Description                                | Keyboard Shortcut |
+| ------------------------------------------------- | ------------------------------------------ | ----------------- |
+| `Git Time Machine: Show Unpushed Commits`         | Display all unpushed commits in sidebar    | -                 |
+| `Git Time Machine: Open Panel View`               | Open bottom panel view (NEW)               | -                 |
+| `Git Time Machine: Refresh Panel View`            | Refresh bottom panel (NEW)                 | -                 |
+| `Git Time Machine: Edit Commit`                   | Quick edit from tree view                  | -                 |
+| `Git Time Machine: Edit Commit (Full Flow)`       | Complete guided flow with date/time picker | -                 |
+| `Git Time Machine: Bulk Edit Multiple Commits`    | Edit multiple commits at once              | -                 |
+| `Git Time Machine: Undo Changes (Restore Backup)` | Restore from backup branch                 | -                 |
+| `Git Time Machine: Refresh`                       | Reload the unpushed commits list           | -                 |
 
 ### Custom Keyboard Shortcuts
 
@@ -203,14 +300,22 @@ You can add custom keyboard shortcuts in VS Code:
 3. Click the **+** icon to add a keybinding
 
 **Suggested shortcuts:**
+
 ```json
 {
-  "key": "ctrl+alt+t",
-  "command": "git-time-machine.showUnpushedCommits"
+  "key": "ctrl+alt+g t",
+  "command": "git-time-machine.showUnpushedCommits",
+  "when": "!inDebugMode"
 },
 {
-  "key": "ctrl+alt+e",
-  "command": "git-time-machine.bulkEdit"
+  "key": "ctrl+alt+g p",
+  "command": "git-time-machine.openPanelView",
+  "when": "!inDebugMode"
+},
+{
+  "key": "ctrl+alt+g e",
+  "command": "git-time-machine.bulkEdit",
+  "when": "!inDebugMode"
 }
 ```
 
@@ -233,14 +338,14 @@ You can add custom keyboard shortcuts in VS Code:
 ✅ **Creates** automatic backups before any changes  
 ✅ **Validates** that commits haven't been pushed  
 ✅ **Warns** about uncommitted changes  
-✅ **Confirms** before making any modifications  
+✅ **Confirms** before making any modifications
 
 ### What Git Time Machine CANNOT Do
 
 ❌ **Edit pushed commits** (blocked by safety checks)  
 ❌ **Delete commits** (not supported)  
 ❌ **Modify commit content** (only metadata)  
-❌ **Force push** (you control that)  
+❌ **Force push** (you control that)
 
 ### How It Works
 
@@ -286,15 +391,27 @@ You can add custom keyboard shortcuts in VS Code:
 
 ### Q: What's the difference between Author Date and Commit Date?
 
-**A:** 
+**A:**
+
 - **Author Date**: When the commit was originally created
 - **Commit Date**: When the commit was last modified (e.g., via amend)
 
-In most cases, they're the same. The Sync button keeps them matched.
+In most cases, they're the same. In v1.0.0+, both dates are synced automatically.
 
 ### Q: Does this require internet access?
 
-**A:** Only for the webview UI (Tailwind CSS and flatpickr are loaded from CDN). The core functionality works offline.
+**A:** No! Version 1.0.0+ works **completely offline**:
+
+- ✅ All UI assets are bundled (VSCode Webview UI Toolkit)
+- ✅ Remote branch checking uses **local git data** (your local copy of remote branches)
+- ✅ The extension attempts `git fetch` but works fine if offline
+- ⚠️ **Note**: For the most accurate "unpushed" detection, do a `git fetch` when online
+
+**How it works offline:**
+
+- Git stores remote branch info locally after each fetch
+- The extension compares against this local copy: `git log origin/main..HEAD`
+- No network requests are made by the extension itself
 
 ### Q: Can I use this in a CI/CD pipeline?
 
@@ -386,6 +503,7 @@ See [CHANGELOG.md](CHANGELOG.md) for a detailed history of changes.
 ### [0.0.1] - 2025-11-07
 
 #### Added
+
 - Initial release
 - Unpushed commit detection
 - Single commit editing (message and timestamp)
@@ -425,7 +543,7 @@ Copyright (c) 2025 DilZhan YaPa
 
 - **Issues**: [GitHub Issues](https://github.com/DilZhaan/git-time-machine/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/DilZhaan/git-time-machine/discussions)
-- **Email**: your.email@example.com
+- **Email**: dilzhanyapa@gmail.com
 
 ---
 

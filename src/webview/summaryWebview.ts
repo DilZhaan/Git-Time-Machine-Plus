@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { CommitEditInfo } from '../commands/bulkEditCommits';
+import { CommitEditInfo } from '../commands/types';
 
 /**
  * Enhanced summary webview with animations and progress

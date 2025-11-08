@@ -1,128 +1,97 @@
 import * as vscode from 'vscode';
 import { Git, GitCommitInfo } from '../lib/git';
-import { DateTimeWebview } from '../webview/dateTimeWebview';
+import {
+  SafetyCheckService,
+  CommitSelectionService,
+  BackupService,
+  CommitEditCollectionService,
+  CommitConfirmationService,
+  CommitEditApplicationService,
+} from './services';
 
 /**
- * Edit commit command - implements the complete flow
+ * Edit commit command - orchestrates the complete edit flow
+ * Follows the Command pattern with service delegation
  */
 export class EditCommitCommand {
-  private git: Git;
-  private webview: DateTimeWebview | null = null;
+  private readonly git: Git;
+  private readonly safetyCheckService: SafetyCheckService;
+  private readonly selectionService: CommitSelectionService;
+  private readonly backupService: BackupService;
+  private readonly editCollectionService: CommitEditCollectionService;
+  private readonly confirmationService: CommitConfirmationService;
+  private readonly editApplicationService: CommitEditApplicationService;
 
   constructor(
-    private context: vscode.ExtensionContext,
-    private workspaceRoot: string
+    private readonly context: vscode.ExtensionContext,
+    private readonly workspaceRoot: string
   ) {
+    // Initialize git and services
     this.git = new Git(workspaceRoot);
+    this.safetyCheckService = new SafetyCheckService(this.git);
+    this.selectionService = new CommitSelectionService();
+    this.backupService = new BackupService(this.git);
+    this.editCollectionService = new CommitEditCollectionService(this.git, context);
+    this.confirmationService = new CommitConfirmationService(context);
+    this.editApplicationService = new CommitEditApplicationService(this.git);
   }
 
   /**
    * Execute the complete edit commit flow
+   * Orchestrates services to implement the workflow
    */
   async execute(): Promise<void> {
     try {
       // Step 1: Scan unpushed commits
       const unpushedCommits = await this.scanUnpushedCommits();
-      if (!unpushedCommits || unpushedCommits.length === 0) {
-        vscode.window.showInformationMessage('No unpushed commits found.');
+      if (!await this.safetyCheckService.verifyUnpushedCommitsExist(unpushedCommits)) {
         return;
       }
 
-      // Step 2: Show QuickPick to select commit
-      const selectedCommit = await this.showCommitQuickPick(unpushedCommits);
+      // Step 2: Select commit to edit
+      const selectedCommit = await this.selectionService.selectSingleCommit(unpushedCommits);
       if (!selectedCommit) {
         return; // User cancelled
       }
 
-      // Safety check: Verify commit is not on remote
-      const isOnRemote = await this.checkCommitOnRemote(selectedCommit.hash);
-      if (isOnRemote) {
-        vscode.window.showErrorMessage(
-          '⚠️ Warning: This commit exists on remote! Cannot edit safely. Aborting.',
-          { modal: true }
-        );
+      // Step 3: Perform safety checks
+      if (!await this.safetyCheckService.checkCommitSafety(selectedCommit)) {
         return;
       }
 
-      // Check working tree is clean
-      const isClean = await this.git.isWorkingTreeClean();
-      if (!isClean) {
-        const proceed = await vscode.window.showWarningMessage(
-          'You have uncommitted changes. It\'s recommended to commit or stash them first. Continue anyway?',
-          { modal: true },
-          'Continue',
-          'Cancel'
-        );
-        if (proceed !== 'Continue') {
-          return;
-        }
-      }
+      // Step 4: Create backup branch
+      await this.backupService.createBackup('gittimemachine');
 
-      // Create backup branch
-      const backupBranch = await this.createBackupBranch();
-      vscode.window.showInformationMessage(
-        `✅ Created backup branch: ${backupBranch}`
-      );
+      // Step 5: Collect edit information
+      const { newMessage, newAuthorDate, newCommitDate } = await this.collectEdits(selectedCommit);
 
-      // Step 3: Ask if user wants to edit message
-      const editMessage = await this.askEditMessage();
-      let newMessage: string | undefined;
-      
-      if (editMessage) {
-        const currentMessage = await this.git.getCommitMessage(selectedCommit.hash);
-        newMessage = await this.promptForNewMessage(currentMessage);
-        if (newMessage === undefined) {
-          return; // User cancelled
-        }
-      }
-
-      // Step 4: Ask if user wants to edit timestamp
-      const editTimestamp = await this.askEditTimestamp();
-      let newAuthorDate: Date | undefined;
-      let newCommitDate: Date | undefined;
-
-      if (editTimestamp) {
-        // Step 5: Open Webview with date/time picker
-        const dates = await this.openDateTimeWebview(selectedCommit);
-        if (!dates) {
-          return; // User cancelled
-        }
-        newAuthorDate = dates.authorDate;
-        newCommitDate = dates.commitDate;
-      }
-
-      // Step 6: Confirm screen
-      const confirmed = await this.showConfirmation(
+      // Step 6: Confirm changes
+      const confirmed = await this.confirmationService.confirmSingleEdit(
         selectedCommit,
         newMessage,
         newAuthorDate,
         newCommitDate
       );
-      
+
       if (!confirmed) {
-        vscode.window.showInformationMessage('Operation cancelled.');
+        await vscode.window.showInformationMessage('Operation cancelled.');
         return;
       }
 
-      // Step 7: Perform git amend via rebase
-      await this.performGitAmend(
-        selectedCommit,
-        newMessage,
-        newAuthorDate,
-        newCommitDate
-      );
+      // Step 7: Validate and apply edit
+      await this.editApplicationService.validateHeadCommitEdit(selectedCommit.hash);
+      await this.performGitAmend(selectedCommit, newMessage, newAuthorDate, newCommitDate);
 
-      vscode.window.showInformationMessage(
+      await vscode.window.showInformationMessage(
         `✅ Successfully edited commit ${selectedCommit.shortHash}!`
       );
-
     } catch (error: any) {
-      vscode.window.showErrorMessage(`Error: ${error.message}`);
+      await vscode.window.showErrorMessage(`Error: ${error.message}`);
     }
   }
 
   /**
-   * Step 1: Scan unpushed commits
+   * Scan unpushed commits with progress indication
    */
   private async scanUnpushedCommits(): Promise<GitCommitInfo[]> {
     return vscode.window.withProgress(
@@ -131,162 +100,54 @@ export class EditCommitCommand {
         title: 'Scanning unpushed commits...',
         cancellable: false,
       },
-      async () => {
-        return await this.git.getUnpushedCommits();
+      async () => await this.git.getUnpushedCommits()
+    );
+  }
+
+  /**
+   * Collect edit information from user
+   */
+  private async collectEdits(commit: GitCommitInfo): Promise<{
+    newMessage?: string;
+    newAuthorDate?: Date;
+    newCommitDate?: Date;
+  }> {
+    let newMessage: string | undefined;
+    let newAuthorDate: Date | undefined;
+    let newCommitDate: Date | undefined;
+
+    // Ask if user wants to edit message
+    const editMessage = await this.editCollectionService.askEditMessage();
+    if (editMessage) {
+      const currentMessage = await this.git.getCommitMessage(commit.hash);
+      newMessage = await vscode.window.showInputBox({
+        prompt: 'Enter new commit message',
+        value: currentMessage,
+        validateInput: (value) => {
+          if (!value || value.trim().length === 0) {
+            return 'Commit message cannot be empty';
+          }
+          return null;
+        },
+      });
+      if (newMessage === undefined) {
+        throw new Error('Operation cancelled');
       }
-    );
-  }
-
-  /**
-   * Step 2: Show QuickPick to select commit
-   */
-  private async showCommitQuickPick(
-    commits: GitCommitInfo[]
-  ): Promise<GitCommitInfo | undefined> {
-    interface CommitQuickPickItem extends vscode.QuickPickItem {
-      commit: GitCommitInfo;
     }
 
-    const items: CommitQuickPickItem[] = commits.map((commit) => ({
-      label: `$(git-commit) ${commit.shortHash}`,
-      description: commit.subject,
-      detail: `${commit.author} • ${this.formatDate(commit.authorDate)}`,
-      commit,
-    }));
-
-    const selected = await vscode.window.showQuickPick(items, {
-      placeHolder: 'Select a commit to edit',
-      matchOnDescription: true,
-      matchOnDetail: true,
-    });
-
-    return selected?.commit;
-  }
-
-  /**
-   * Safety check: Verify commit is not on remote
-   */
-  private async checkCommitOnRemote(hash: string): Promise<boolean> {
-    return await this.git.commitExistsOnRemote(hash);
-  }
-
-  /**
-   * Create backup branch before rewriting
-   */
-  private async createBackupBranch(): Promise<string> {
-    return await this.git.createBackupBranch('gittimemachine');
-  }
-
-  /**
-   * Step 3: Ask if user wants to edit message
-   */
-  private async askEditMessage(): Promise<boolean> {
-    const choice = await vscode.window.showQuickPick(
-      [
-        { label: '✏️ Yes, edit message', value: true },
-        { label: '⏭️ No, keep current message', value: false },
-      ],
-      {
-        placeHolder: 'Do you want to edit the commit message?',
-      }
-    );
-    return choice?.value ?? false;
-  }
-
-  /**
-   * Prompt for new commit message
-   */
-  private async promptForNewMessage(currentMessage: string): Promise<string | undefined> {
-    return await vscode.window.showInputBox({
-      prompt: 'Enter new commit message',
-      value: currentMessage,
-      validateInput: (value) => {
-        if (!value || value.trim().length === 0) {
-          return 'Commit message cannot be empty';
-        }
-        return null;
-      },
-    });
-  }
-
-  /**
-   * Step 4: Ask if user wants to edit timestamp
-   */
-  private async askEditTimestamp(): Promise<boolean> {
-    const choice = await vscode.window.showQuickPick(
-      [
-        { label: '📅 Yes, edit timestamp', value: true },
-        { label: '⏭️ No, keep current timestamp', value: false },
-      ],
-      {
-        placeHolder: 'Do you want to edit the commit timestamp?',
-      }
-    );
-    return choice?.value ?? false;
-  }
-
-  /**
-   * Step 5: Open Webview with date/time picker
-   */
-  private async openDateTimeWebview(
-    commit: GitCommitInfo
-  ): Promise<{ authorDate: Date; commitDate: Date } | undefined> {
-    this.webview = new DateTimeWebview(this.context, commit);
-    return await this.webview.show();
-  }
-
-  /**
-   * Step 6: Show confirmation screen
-   */
-  private async showConfirmation(
-    commit: GitCommitInfo,
-    newMessage?: string,
-    newAuthorDate?: Date,
-    newCommitDate?: Date
-  ): Promise<boolean> {
-    const changes: string[] = [];
-
-    if (newMessage) {
-      changes.push(`Message: "${commit.subject}" → "${newMessage}"`);
+    // Ask if user wants to edit timestamp
+    const editTimestamp = await this.editCollectionService.askEditTimestamp();
+    if (editTimestamp) {
+      const edit = await this.editCollectionService.collectEditForCommit(commit);
+      newAuthorDate = edit.newAuthorDate;
+      newCommitDate = edit.newCommitDate;
     }
 
-    if (newAuthorDate) {
-      changes.push(
-        `Author Date: ${this.formatDate(commit.authorDate)} → ${this.formatDate(newAuthorDate)}`
-      );
-    }
-
-    if (newCommitDate) {
-      changes.push(
-        `Commit Date: ${this.formatDate(commit.commitDate)} → ${this.formatDate(newCommitDate)}`
-      );
-    }
-
-    if (changes.length === 0) {
-      vscode.window.showInformationMessage('No changes to apply.');
-      return false;
-    }
-
-    const message = [
-      `You are about to edit commit ${commit.shortHash}:`,
-      '',
-      ...changes,
-      '',
-      'This will rewrite git history. Continue?',
-    ].join('\n');
-
-    const choice = await vscode.window.showWarningMessage(
-      message,
-      { modal: true },
-      'Confirm',
-      'Cancel'
-    );
-
-    return choice === 'Confirm';
+    return { newMessage, newAuthorDate, newCommitDate };
   }
 
   /**
-   * Step 7: Perform git amend
+   * Perform git amend operation
    */
   private async performGitAmend(
     commit: GitCommitInfo,
@@ -294,33 +155,14 @@ export class EditCommitCommand {
     newAuthorDate?: Date,
     newCommitDate?: Date
   ): Promise<void> {
-    const isHead = await this.git.isHeadCommit(commit.hash);
-
-    if (isHead) {
-      // Simple amend for HEAD commit
-      await this.git.amendHeadCommit(newMessage, newAuthorDate, newCommitDate);
-    } else {
-      // For older commits, we need interactive rebase
-      // This is simplified - in practice, you'd need a more robust solution
-      vscode.window.showWarningMessage(
-        'Editing non-HEAD commits requires interactive rebase. Currently, only HEAD commits are fully supported via webview.'
-      );
-      throw new Error('Only HEAD commit editing is fully implemented with webview');
-    }
+    await this.git.amendHeadCommit(newMessage, newAuthorDate, newCommitDate);
   }
 
   /**
-   * Format date for display
-   */
-  private formatDate(date: Date): string {
-    return date.toLocaleString();
-  }
-
-  /**
-   * Cleanup
+   * Cleanup resources
    */
   dispose(): void {
-    this.webview?.dispose();
+    // Services are stateless and don't require cleanup
   }
 }
 
