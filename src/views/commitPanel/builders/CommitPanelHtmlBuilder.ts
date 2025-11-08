@@ -91,7 +91,7 @@ export class CommitPanelHtmlBuilder {
         'node_modules',
         '@vscode/webview-ui-toolkit',
         'dist',
-        'toolkit.min.js'
+        'toolkit.js'
       )
     );
   }

@@ -23,6 +23,35 @@ export class WebviewScriptBuilder {
           const vscode = acquireVsCodeApi();
           console.log('Git Time Machine Plus webview loaded');
 
+          // Wait for VSCode Design System to be ready
+          async function waitForDesignSystem() {
+            console.log('Waiting for VSCode Design System...');
+            try {
+              // Wait for provideVSCodeDesignSystem to be available
+              let attempts = 0;
+              while (!window.provideVSCodeDesignSystem && attempts < 50) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+                attempts++;
+              }
+              
+              if (window.provideVSCodeDesignSystem) {
+                // Register all components
+                window.provideVSCodeDesignSystem().register(
+                  window.vsCodeButton(),
+                  window.vsCodeTextField(),
+                  window.vsCodeTextArea(),
+                  window.vsCodeCheckbox(),
+                  window.vsCodeProgressRing()
+                );
+                console.log('✅ VSCode Design System registered');
+              } else {
+                console.error('❌ VSCode Design System not found after waiting');
+              }
+            } catch (error) {
+              console.error('❌ Error initializing design system:', error);
+            }
+          }
+
           ${StateManagerScript.generate()}
           ${CommitRendererScript.generate()}
           ${ViewManagerScript.generate()}
@@ -43,6 +72,7 @@ export class WebviewScriptBuilder {
 
             async initialize() {
               console.log('Initializing webview application...');
+              await waitForDesignSystem();
               await this.eventHandler.initializeEventListeners();
               this.messageHandler.initializeMessageListener();
               console.log('✅ Application initialized');
