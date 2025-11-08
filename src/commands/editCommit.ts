@@ -72,7 +72,7 @@ export class EditCommitCommand {
         newAuthorDate,
         newCommitDate
       );
-
+      
       if (!confirmed) {
         await vscode.window.showInformationMessage('Operation cancelled.');
         return;
@@ -121,15 +121,15 @@ export class EditCommitCommand {
     if (editMessage) {
       const currentMessage = await this.git.getCommitMessage(commit.hash);
       newMessage = await vscode.window.showInputBox({
-        prompt: 'Enter new commit message',
-        value: currentMessage,
-        validateInput: (value) => {
-          if (!value || value.trim().length === 0) {
-            return 'Commit message cannot be empty';
-          }
-          return null;
-        },
-      });
+      prompt: 'Enter new commit message',
+      value: currentMessage,
+      validateInput: (value) => {
+        if (!value || value.trim().length === 0) {
+          return 'Commit message cannot be empty';
+        }
+        return null;
+      },
+    });
       if (newMessage === undefined) {
         throw new Error('Operation cancelled');
       }
@@ -155,7 +155,7 @@ export class EditCommitCommand {
     newAuthorDate?: Date,
     newCommitDate?: Date
   ): Promise<void> {
-    await this.git.amendHeadCommit(newMessage, newAuthorDate, newCommitDate);
+      await this.git.amendHeadCommit(newMessage, newAuthorDate, newCommitDate);
   }
 
   /**

@@ -61,7 +61,7 @@ export class CommitPanelHtmlBuilder {
         font-src ${webview.cspSource} data:;
         img-src ${webview.cspSource} https:;">
       <link href="${codiconsUri}" rel="stylesheet" />
-      <script nonce="${nonce}" type="module" src="${toolkitUri}"></script>
+      <script nonce="${nonce}" src="${toolkitUri}"></script>
       <title>Git Time Machine Plus</title>
     `;
   }
