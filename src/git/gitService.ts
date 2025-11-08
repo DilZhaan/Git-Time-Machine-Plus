@@ -1,6 +1,9 @@
 import { exec } from 'child_process';
 import { promisify } from 'util';
 import * as vscode from 'vscode';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as os from 'os';
 import { GitCommit, UnpushedCommitsResult } from '../types';
 
 const execAsync = promisify(exec);
@@ -197,14 +200,65 @@ export class GitService {
           cwd: this.workspaceRoot,
         });
       } else {
-        // For older commits, use interactive rebase
-        await execAsync(
-          `git commit --fixup=${commitHash} && git rebase -i --autosquash ${commitHash}~1`,
-          { cwd: this.workspaceRoot }
-        );
+        // For older commits, use filter-branch approach
+        await this.rebaseEditCommitMessage(commitHash, newMessage);
       }
     } catch (error) {
       throw new Error(`Failed to edit commit message: ${error}`);
+    }
+  }
+
+  /**
+   * Rebase to edit an older commit's message
+   */
+  private async rebaseEditCommitMessage(commitHash: string, newMessage: string): Promise<void> {
+    // Create a temporary script for the sequence editor
+    const tmpDir = os.tmpdir();
+    const scriptPath = path.join(tmpDir, `git-rebase-script-${Date.now()}.sh`);
+    
+    // Script to replace 'pick' with 'reword' for the target commit
+    const script = `#!/bin/sh
+sed -i.bak "s/^pick ${commitHash.substring(0, 7)}/reword ${commitHash.substring(0, 7)}/" "$1"
+`;
+
+    fs.writeFileSync(scriptPath, script, { mode: 0o755 });
+
+    try {
+      // Step 1: Start the interactive rebase with our custom sequence editor
+      await execAsync(`git rebase -i ${commitHash}~1`, {
+        cwd: this.workspaceRoot,
+        env: {
+          ...process.env,
+          GIT_SEQUENCE_EDITOR: scriptPath,
+          GIT_EDITOR: `sh -c 'echo "${newMessage.replace(/"/g, '\\"')}" > "$1"' --`
+        }
+      });
+
+      // Clean up the script file
+      fs.unlinkSync(scriptPath);
+    } catch (error: any) {
+      // Clean up the script file even on error
+      try {
+        fs.unlinkSync(scriptPath);
+      } catch (cleanupError) {
+        // Ignore cleanup errors
+      }
+
+      // Check if we're in the middle of a rebase
+      const gitDir = path.join(this.workspaceRoot, '.git');
+      const rebaseMergeDir = path.join(gitDir, 'rebase-merge');
+      const rebaseApplyDir = path.join(gitDir, 'rebase-apply');
+      
+      if (fs.existsSync(rebaseMergeDir) || fs.existsSync(rebaseApplyDir)) {
+        // Abort the rebase
+        try {
+          await execAsync('git rebase --abort', { cwd: this.workspaceRoot });
+        } catch (abortError) {
+          // Ignore abort errors
+        }
+      }
+
+      throw error;
     }
   }
 
@@ -227,10 +281,80 @@ export class GitService {
           { cwd: this.workspaceRoot, env: { ...process.env, GIT_COMMITTER_DATE: dateString } }
         );
       } else {
-        throw new Error('Editing timestamps for non-HEAD commits requires interactive rebase');
+        // For older commits, use filter-branch to rewrite the commit
+        await this.rebaseEditCommitTimestamp(commitHash, newDate);
       }
     } catch (error) {
       throw new Error(`Failed to edit commit timestamp: ${error}`);
+    }
+  }
+
+  /**
+   * Rebase to edit an older commit's timestamp
+   */
+  private async rebaseEditCommitTimestamp(commitHash: string, newDate: Date): Promise<void> {
+    const dateString = newDate.toISOString();
+
+    // Create a temporary script for the sequence editor
+    const tmpDir = os.tmpdir();
+    const scriptPath = path.join(tmpDir, `git-rebase-script-${Date.now()}.sh`);
+    
+    // Script to replace 'pick' with 'edit' for the target commit
+    const script = `#!/bin/sh
+sed -i.bak "s/^pick ${commitHash.substring(0, 7)}/edit ${commitHash.substring(0, 7)}/" "$1"
+`;
+
+    fs.writeFileSync(scriptPath, script, { mode: 0o755 });
+
+    try {
+      // Step 1: Start the interactive rebase
+      await execAsync(`git rebase -i ${commitHash}~1`, {
+        cwd: this.workspaceRoot,
+        env: {
+          ...process.env,
+          GIT_SEQUENCE_EDITOR: scriptPath
+        }
+      });
+
+      // Step 2: Amend the commit with new timestamp
+      await execAsync('git commit --amend --no-edit --date="' + dateString + '"', {
+        cwd: this.workspaceRoot,
+        env: {
+          ...process.env,
+          GIT_COMMITTER_DATE: dateString
+        }
+      });
+
+      // Step 3: Continue the rebase
+      await execAsync('git rebase --continue', {
+        cwd: this.workspaceRoot
+      });
+
+      // Clean up the script file
+      fs.unlinkSync(scriptPath);
+    } catch (error: any) {
+      // Clean up the script file even on error
+      try {
+        fs.unlinkSync(scriptPath);
+      } catch (cleanupError) {
+        // Ignore cleanup errors
+      }
+
+      // Check if we're in the middle of a rebase
+      const gitDir = path.join(this.workspaceRoot, '.git');
+      const rebaseMergeDir = path.join(gitDir, 'rebase-merge');
+      const rebaseApplyDir = path.join(gitDir, 'rebase-apply');
+      
+      if (fs.existsSync(rebaseMergeDir) || fs.existsSync(rebaseApplyDir)) {
+        // Abort the rebase
+        try {
+          await execAsync('git rebase --abort', { cwd: this.workspaceRoot });
+        } catch (abortError) {
+          // Ignore abort errors
+        }
+      }
+
+      throw error;
     }
   }
 
