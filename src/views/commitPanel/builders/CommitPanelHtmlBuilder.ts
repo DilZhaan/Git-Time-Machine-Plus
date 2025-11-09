@@ -57,11 +57,15 @@ export class CommitPanelHtmlBuilder {
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta http-equiv="Content-Security-Policy" content="default-src 'none'; 
         style-src ${webview.cspSource} 'unsafe-inline'; 
-        script-src 'nonce-${nonce}' ${webview.cspSource}; 
+        script-src 'nonce-${nonce}'; 
         font-src ${webview.cspSource} data:;
         img-src ${webview.cspSource} https:;">
       <link href="${codiconsUri}" rel="stylesheet" />
-      <script nonce="${nonce}" src="${toolkitUri}"></script>
+      <script type="module" nonce="${nonce}">
+        // Import and register VSCode Design System
+        import { VSCodeDesignSystem } from '${toolkitUri}';
+        window.VSCodeDesignSystem = VSCodeDesignSystem;
+      </script>
       <title>Git Time Machine Plus</title>
     `;
   }

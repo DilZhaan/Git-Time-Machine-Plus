@@ -41,7 +41,6 @@ export class EventHandlerScript {
             ]);
 
             await Promise.race([componentsReady, timeout]);
-            console.log('✅ All web components are defined');
           } catch (e) {
             console.warn('⚠️ Web components may not be fully loaded:', e);
           }
@@ -54,7 +53,6 @@ export class EventHandlerScript {
               const query = e.target.value;
               vscode.postMessage({ type: 'search', query });
             });
-            console.log('✅ Search input listener attached');
           }
         }
 
@@ -64,7 +62,6 @@ export class EventHandlerScript {
             refreshBtn.addEventListener('click', () => {
               vscode.postMessage({ type: 'refresh' });
             });
-            console.log('✅ Refresh button listener attached');
           }
         }
 
@@ -79,7 +76,6 @@ export class EventHandlerScript {
                 });
               }
             });
-            console.log('✅ Bulk button listener attached');
           }
         }
 

@@ -21,15 +21,11 @@ export class WebviewScriptBuilder {
         (function() {
           // Acquire VS Code API
           const vscode = acquireVsCodeApi();
-          console.log('Git Time Machine Plus webview loaded');
 
           // Note: VSCode Webview UI Toolkit should auto-register from the loaded script tag
           // If components don't appear, check browser console for errors
           async function waitForDesignSystem() {
-            console.log('Waiting for DOM to be ready...');
-            // Just wait a bit for the toolkit script to execute
             await new Promise(resolve => setTimeout(resolve, 100));
-            console.log('✅ Ready to initialize');
           }
 
           ${StateManagerScript.generate()}
@@ -51,11 +47,9 @@ export class WebviewScriptBuilder {
             }
 
             async initialize() {
-              console.log('Initializing webview application...');
               await waitForDesignSystem();
               await this.eventHandler.initializeEventListeners();
               this.messageHandler.initializeMessageListener();
-              console.log('✅ Application initialized');
             }
           }
 
