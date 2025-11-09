@@ -193,9 +193,10 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run build",
-    "build": "npm run compile && npm run lint",
+    "build": "npm run compile && npm run copy-deps && npm run lint",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
+    "copy-deps": "node scripts/copy-dependencies.js",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js",

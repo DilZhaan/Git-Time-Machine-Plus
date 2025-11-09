@@ -13,13 +13,14 @@ tsconfig.json
 **/*.ts
 !out/**/*.d.ts
 
-# Dependencies (they're bundled)
+# Dependencies (exclude node_modules, we copy what we need to out/)
 node_modules/**
-!node_modules/@vscode/webview-ui-toolkit/**
-!node_modules/@vscode/codicons/**
 
 # Build artifacts
 *.vsix
+
+# Scripts not needed in package
+scripts/**
 
 # Documentation source files (keep only essentials)
 ARCHITECTURE.md

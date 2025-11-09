@@ -77,9 +77,8 @@ export class CommitPanelHtmlBuilder {
     return webview.asWebviewUri(
       vscode.Uri.joinPath(
         this.extensionUri,
-        'node_modules',
-        '@vscode/codicons',
-        'dist',
+        'out',
+        'codicons',
         'codicon.css'
       )
     );
@@ -92,9 +91,8 @@ export class CommitPanelHtmlBuilder {
     return webview.asWebviewUri(
       vscode.Uri.joinPath(
         this.extensionUri,
-        'node_modules',
-        '@vscode/webview-ui-toolkit',
-        'dist',
+        'out',
+        'webview-toolkit',
         'toolkit.js'
       )
     );
